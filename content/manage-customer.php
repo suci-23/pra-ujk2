@@ -11,6 +11,12 @@ if (isset($_GET['edit'])) {
     $query = mysqli_query($config, "SELECT * FROM customer WHERE id='$edit'");
     $row = mysqli_fetch_assoc($query);
 
+    //Cegah akses id_customer yang tidak ada di DB
+    if (mysqli_num_rows($query) == 0) {
+        header("location:?page=customers&data=notfound");
+        exit();
+    }
+
     // Jika Ada, UPDATE
     if (isset($_POST['save'])) {
         $name = $_POST['customer_name'];
@@ -43,15 +49,20 @@ if (isset($_GET['edit'])) {
                     <form action="" method="post">
                         <div class="mb-3">
                             <label for="" class="form-label">Customer Name*</label>
-                            <input name="customer_name" type="text" class="form-control" value="<?php echo isset($_GET['edit']) ? $row['customer_name'] : '' ?>" placeholder="Enter your name" required>
+                            <input name="customer_name" type="text" class="form-control"
+                                value="<?php echo isset($_GET['edit']) ? $row['customer_name'] : '' ?>" placeholder="Enter your name"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Phone*</label>
-                            <input name="phone" type="text" class="form-control" value="<?php echo isset($_GET['edit']) ? $row['phone'] : '' ?>" placeholder="Enter your phone number" required>
+                            <input name="phone" type="text" class="form-control"
+                                value="<?php echo isset($_GET['edit']) ? $row['phone'] : '' ?>" placeholder="Enter your phone number"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Address*</label>
-                            <textarea name="address" id="" cols="30" rows="5" class="form-control" required><?php echo isset($_GET['edit']) ? $row['address'] : '' ?></textarea>
+                            <textarea name="address" id="" cols="30" rows="5" class="form-control"
+                                required><?php echo isset($_GET['edit']) ? $row['address'] : '' ?></textarea>
                         </div>
                         <div class="mb-3">
                             <button name="save" type="submit" class="btn btn-success">Save</button>

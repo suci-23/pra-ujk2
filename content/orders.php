@@ -29,7 +29,7 @@ if (isset($_GET['delete'])) {
                     <h5 class="card-title">Data Orders</h5>
                     <div class="table-responsive">
                         <div class="mb-3" align="right">
-                            <a href="?page=tambah-order" class="btn btn-primary">New Order</a>
+                            <a href="?page=manage-order" class="btn btn-primary">New Order</a>
                         </div>
                         <table class="table table-bordered">
                             <thead>
@@ -44,7 +44,9 @@ if (isset($_GET['delete'])) {
                             <tbody>
                                 <?php foreach ($rowOrder as $order): ?>
                                     <tr>
-                                        <td><a href="?page=manage-order&detail=<?php echo $order['id'] ?>"><?php echo $order['order_code'] ?></a></td>
+                                        <td><a
+                                                href="?page=manage-order&detail=<?php echo $order['id'] ?>"><?php echo $order['order_code'] ?></a>
+                                        </td>
                                         <td><?php echo $order['customer_name'] ?></td>
                                         <td><?php echo $order['order_date'] ?></td>
                                         <td><?php echo $order['order_status'] == 0 ? 'Process' : 'Pickup' ?></td>

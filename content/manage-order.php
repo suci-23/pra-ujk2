@@ -21,6 +21,11 @@ if (isset($_GET['detail'])) {
 }
 
 if (isset($_POST['save'])) {
+    if (empty($POST['id_service'])) {
+        header('location:?page=manage-order&transaction=failed');
+        exit;
+    }
+
     $id_customer = $_POST['id_customer'];
     $order_code = $_POST['order_code'];
     $order_status = $_POST['order_status'];
@@ -166,7 +171,8 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                             <?php if ($rowOrder['order_status'] == 0) { ?>
                                 <div class="mb-3" align="center">
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pay Now</button>
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Pay
+                                        Now</button>
                                 </div>
                             <?php } ?>
                         <?php } ?>
@@ -189,7 +195,9 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                                             <select name="id_customer" id="" class="form-control">
                                                 <option value="">---Choose Customer---</option>
                                                 <?php foreach ($rowCustomer as $customer): ?>
-                                                    <option <?php echo isset($_GET['edit']) ? ($customer['id'] == $row['id_customer'] ? 'selected' : '') : '' ?> value="<?php echo $customer['id'] ?>"><?php echo $customer['customer_name'] ?></option>
+                                                    <option
+                                                        <?php echo isset($_GET['edit']) ? ($customer['id'] == $row['id_customer'] ? 'selected' : '') : '' ?>
+                                                        value="<?php echo $customer['id'] ?>"><?php echo $customer['customer_name'] ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         <?php } ?>
@@ -199,7 +207,8 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                                         <select name="id_service" id="id_service" class="form-control">
                                             <option value="">Select Service</option>
                                             <?php foreach ($rowServices as $service): ?>
-                                                <option data-price="<?php echo $service['price'] ?>" value="<?php echo $service['id'] ?>"><?php echo $service['service_name'] ?></option>
+                                                <option data-price="<?php echo $service['price'] ?>" value="<?php echo $service['id'] ?>">
+                                                    <?php echo $service['service_name'] ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
@@ -207,11 +216,13 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                                 <div class="col-sm-6">
                                     <div class="mb-3">
                                         <label for="" class="form-label">Order Date</label>
-                                        <input name="order_date" type="date" class="form-control" value="<?php echo isset($_GET['edit']) ? $row['order_date'] : '' ?>">
+                                        <input name="order_date" type="date" class="form-control"
+                                            value="<?php echo isset($_GET['edit']) ? $row['order_date'] : '' ?>">
                                     </div>
                                     <div class="mb-3">
                                         <label for="" class="form-label">End Date</label>
-                                        <input name="order_end_date" type="date" class="form-control" value="<?php echo isset($_GET['edit']) ? $row['order_end_date'] : '' ?>">
+                                        <input name="order_end_date" type="date" class="form-control"
+                                            value="<?php echo isset($_GET['edit']) ? $row['order_end_date'] : '' ?>">
                                     </div>
                                     <div class="mb-3">
                                         <label for="" class="form-label">Order Status</label>
@@ -269,7 +280,8 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                     </div>
                     <div class="mb-3">
                         <label for="pay" class="form-label">Pay</label>
-                        <input type="number" step="any" min="<?php echo $rowOrder['total']; ?>" name="order_pay" id="pay" class="form-control" required>
+                        <input type="number" step="any" min="<?php echo $rowOrder['total']; ?>" name="order_pay" id="pay"
+                            class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
