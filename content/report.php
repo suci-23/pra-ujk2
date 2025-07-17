@@ -3,13 +3,18 @@ if (strtolower($rowLevel['level_name']) == 'operator') {
     header("location:home.php?access=denied");
     exit;
 }
+
 $query = mysqli_query($config, "SELECT * FROM trans_order ORDER BY order_date ASC");
 $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
 $max = mysqli_num_rows($query);
 
-$minDate = $row[0]['order_date'];
-$maxDate = $row[$max - 1]['order_date'];
-
+if (!empty($row)) {
+    $minDate = $row[0]['order_date'];
+    $maxDate = $row[count($row) - 1]['order_date'];
+} else {
+    $minDate = '';
+    $maxDate = '';
+}
 
 if (isset($_POST['filter'])) {
     $date = $_POST['date'];

@@ -10,6 +10,12 @@ if (isset($_GET['edit'])) {
     $query = mysqli_query($config, "SELECT * FROM user WHERE id='$edit'");
     $row = mysqli_fetch_assoc($query);
 
+    //Cegah akses id_user yang tidak ada di DB
+    if (mysqli_num_rows($query) == 0) {
+        header("location:?page=users&data=notfound");
+        exit();
+    }
+
     // Jika Ada, UPDATE
     if (isset($_POST['save'])) {
         $id_level = $_POST['id_level'];
@@ -50,17 +56,20 @@ $rowLevel = mysqli_fetch_all($queryLevel, MYSQLI_ASSOC);
                             <select name="id_level" id="" class="form-control">
                                 <option value="">Select One</option>
                                 <?php foreach ($rowLevel as $level): ?>
-                                    <option <?php echo isset($_GET['edit']) ? ($level['id'] == $row['id_level'] ? 'selected' : '') : '' ?> value="<?php echo $level['id'] ?>"><?php echo $level['level_name'] ?></option>
+                                    <option <?php echo isset($_GET['edit']) ? ($level['id'] == $row['id_level'] ? 'selected' : '') : '' ?>
+                                        value="<?php echo $level['id'] ?>"><?php echo $level['level_name'] ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Name*</label>
-                            <input name="name" type="text" class="form-control" value="<?php echo isset($_GET['edit']) ? $row['name'] : '' ?>" placeholder="Enter your name" required>
+                            <input name="name" type="text" class="form-control"
+                                value="<?php echo isset($_GET['edit']) ? $row['name'] : '' ?>" placeholder="Enter your name" required>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Email*</label>
-                            <input name="email" type="text" class="form-control" value="<?php echo isset($_GET['edit']) ? $row['email'] : '' ?>" placeholder="Enter your email" required>
+                            <input name="email" type="text" class="form-control"
+                                value="<?php echo isset($_GET['edit']) ? $row['email'] : '' ?>" placeholder="Enter your email" required>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Password*</label>

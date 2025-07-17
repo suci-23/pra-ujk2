@@ -13,15 +13,19 @@ function tanggal($date)
 
 if (isset($_GET['detail'])) {
     $id_order = $_GET['detail'];
-    $queryOrder = mysqli_query($config, "SELECT trans_order.*, customer.customer_name FROM trans_order LEFT JOIN customer ON trans_order.id_customer = customer.id WHERE trans_order.id = '$id_order'");
+    $queryOrder = mysqli_query($config, "SELECT trans_order.*, customer.customer_name FROM trans_order
+                                            LEFT JOIN customer ON trans_order.id_customer = customer.id
+                                            WHERE trans_order.id = '$id_order'");
     $rowOrder = mysqli_fetch_assoc($queryOrder);
 
-    $queryDetail = mysqli_query($config, "SELECT trans_order_detail.*, type_of_service.* FROM trans_order_detail LEFT JOIN type_of_service ON trans_order_detail.id_service = type_of_service.id WHERE id_order = '$id_order' ORDER BY trans_order_detail.id DESC");
+    $queryDetail = mysqli_query($config, "SELECT trans_order_detail.*, type_of_service.* FROM trans_order_detail
+                                            LEFT JOIN type_of_service ON trans_order_detail.id_service = type_of_service.id
+                                            WHERE id_order = '$id_order' ORDER BY trans_order_detail.id ASC");
     $rowDetail = mysqli_fetch_all($queryDetail, MYSQLI_ASSOC);
 }
 
 if (isset($_POST['save'])) {
-    if (empty($POST['id_service'])) {
+    if (empty($_POST['id_service'])) {
         header('location:?page=manage-order&transaction=failed');
         exit;
     }
@@ -36,15 +40,21 @@ if (isset($_POST['save'])) {
     $insert = mysqli_query($config, "INSERT INTO trans_order (id_customer, order_code, order_status, order_date, order_end_date, total) VALUES ('$id_customer', '$order_code', '$order_status', '$order_date', '$order_end_date', '$grand_total')");
     if ($insert) {
         $id_order = mysqli_insert_id($config);
-        for ($i = 0; $i < count($_POST['id_service']); $i++) {
-            $id_service = $_POST['id_service'][$i];
-            $qty = $_POST['qty'][$i] * 1000;
-            $queryService = mysqli_query($config, "SELECT * FROM type_of_service WHERE id = '$id_service'");
-            $rowService = mysqli_fetch_assoc($queryService);
-            $subtotal = $_POST['qty'][$i] * $rowService['price'];
-            mysqli_query($config, "INSERT INTO trans_order_detail (id_order, id_service, qty, subtotal) VALUES('$id_order', '$id_service', '$qty', '$subtotal')");
+        if (isset($_POST['id_service']) && is_array($_POST['id_service'])) {
+            for ($i = 0; $i < count($_POST['id_service']); $i++) {
+                // proses data
+                $id_service = $_POST['id_service'][$i];
+                $qty = $_POST['qty'][$i] * 1000;
+                $queryService = mysqli_query($config, "SELECT * FROM type_of_service WHERE id = '$id_service'");
+                $rowService = mysqli_fetch_assoc($queryService);
+                $subtotal = $_POST['qty'][$i] * $rowService['price'];
+                mysqli_query($config, "INSERT INTO trans_order_detail (id_order, id_service, qty, subtotal) VALUES('$id_order', '$id_service', '$qty', '$subtotal')");
+            }
+            header("location:?page=orders&add=success");
+        } else {
+            // bisa tampilkan pesan kesalahan atau log
+            // echo "Data layanan tidak valid atau tidak dikirim.";
         }
-        header("location:?page=orders&add=success");
     }
 }
 
@@ -70,7 +80,7 @@ $rowNoTrans = mysqli_fetch_assoc($queryNoTrans);
 $id_trans = $rowNoTrans['id_trans'];
 $id_trans++;
 
-$format_no = "TR";
+$format_no = "INV";
 $date = date("dmy");
 $icrement_number = sprintf("%03s", $id_trans);
 $orderCode = $format_no . "-" . $date . "-" . $icrement_number;
@@ -98,7 +108,7 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                         <h5 class="card-title">Detail Order</h5>
                         <div class="table-responsive mb-3">
                             <div class="mb-3" align="right">
-                                <a href="?page=order" class="btn btn-secondary">Back</a>
+                                <a href="?page=orders" class="btn btn-secondary">Back</a>
                             </div>
                             <table class="table table-stripped">
                                 <tr>
@@ -120,7 +130,8 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                                 <tr>
                                     <th>Status</th>
                                     <td>:</td>
-                                    <td><?php echo $rowOrder['order_status'] == 0 ? 'Process' : 'Picked' ?></td>
+                                    <td><?php echo $rowOrder['order_status'] == 0 ? "Process" : 'Picked Up' ?>
+                                    </td>
                                 </tr>
                             </table>
                             <br><br>
@@ -193,7 +204,7 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                                             <input type="hidden" name="id_customer" value="<?php echo $rowCustomers['id'] ?>">
                                         <?php } else { ?>
                                             <select name="id_customer" id="" class="form-control">
-                                                <option value="">---Choose Customer---</option>
+                                                <option value="">---Select Customer---</option>
                                                 <?php foreach ($rowCustomer as $customer): ?>
                                                     <option
                                                         <?php echo isset($_GET['edit']) ? ($customer['id'] == $row['id_customer'] ? 'selected' : '') : '' ?>
@@ -203,9 +214,9 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                                         <?php } ?>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="" class="form-label">Name Service</label>
+                                        <label for="" class="form-label">Type Of Service</label>
                                         <select name="id_service" id="id_service" class="form-control">
-                                            <option value="">Select Service</option>
+                                            <option value="">---Select Service---</option>
                                             <?php foreach ($rowServices as $service): ?>
                                                 <option data-price="<?php echo $service['price'] ?>" value="<?php echo $service['id'] ?>">
                                                     <?php echo $service['service_name'] ?></option>
@@ -227,9 +238,8 @@ $rowServices = mysqli_fetch_all($queryServices, MYSQLI_ASSOC);
                                     <div class="mb-3">
                                         <label for="" class="form-label">Order Status</label>
                                         <select name="order_status" id="" class="form-control">
-                                            <option value="">Select Status</option>
                                             <option value="0">Process</option>
-                                            <option value="1">Pick Up</option>
+                                            <!-- <option value="1">Pick Up</option> -->
                                         </select>
                                     </div>
                                 </div>

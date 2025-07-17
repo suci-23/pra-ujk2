@@ -7,7 +7,7 @@ if (strtolower($rowLevel['level_name']) == 'leader') {
 
 //SOFT DELETE QUERY
 $showService = mysqli_query($config, "SELECT * FROM type_of_service
-                                WHERE deleted_at IS NULL ORDER BY id DESC");
+                                WHERE deleted_at IS NULL ORDER BY id ASC");
 $rowService = mysqli_fetch_all($showService, MYSQLI_ASSOC);
 
 if (isset($_GET['delete'])) {
@@ -49,14 +49,14 @@ if (isset($_GET['delete'])) {
                             <tbody>
                                 <?php foreach ($rowService as $index => $service): ?>
                                     <tr>
-                                        <td><?php echo $index += 1 ?></td>
+                                        <td align="center"><?php echo $index += 1 ?></td>
                                         <td><?php echo $service['service_name'] ?></td>
-                                        <td><?php echo $service['price'] ?></td>
+                                        <td align="center">Rp. <?php echo $service['price'] ?></td>
                                         <td><?php echo $service['description'] ?></td>
 
                                         <!-- Action Hanya Dikelola Administrator -->
                                         <?php if ($_SESSION['ID_LEVEL'] == 1): ?>
-                                            <td>
+                                            <td align="center">
                                                 <a href="?page=manage-service&edit=<?php echo $service['id'] ?>" class="btn btn-warning">Edit</a>
                                                 <a href="?page=services&delete=<?php echo $service['id'] ?>" class="btn btn-danger">Delete</a>
                                             </td>

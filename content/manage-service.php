@@ -12,6 +12,12 @@ if (isset($_GET['edit'])) {
     $query = mysqli_query($config, "SELECT * FROM type_of_service WHERE id='$edit'");
     $row = mysqli_fetch_assoc($query);
 
+    //Cegah akses id_service yang tidak ada di DB
+    if (mysqli_num_rows($query) == 0) {
+        header("location:?page=services&data=notfound");
+        exit();
+    }
+
     // Jika Ada, UPDATE
     if (isset($_POST['save'])) {
         $name = $_POST['service_name'];
@@ -44,15 +50,19 @@ if (isset($_GET['edit'])) {
                     <form action="" method="post">
                         <div class="mb-3">
                             <label for="" class="form-label">Service Name*</label>
-                            <input name="service_name" type="text" class="form-control" value="<?php echo isset($_GET['edit']) ? $row['service_name'] : '' ?>" placeholder="Enter your name service" required>
+                            <input name="service_name" type="text" class="form-control"
+                                value="<?php echo isset($_GET['edit']) ? $row['service_name'] : '' ?>"
+                                placeholder="Enter your name service" required>
                         </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Price (/Kg)*</label>
-                            <input name="price" type="text" class="form-control" value="<?php echo isset($_GET['edit']) ? $row['price'] : '' ?>" placeholder="Enter your price" required>
+                            <input name="price" type="text" class="form-control"
+                                value="<?php echo isset($_GET['edit']) ? $row['price'] : '' ?>" placeholder="Enter your price" required>
                         </div>
                         <div class="mb-3">
-                            <label for="" class="form-label">Description*</label>
-                            <textarea name="description" id="" cols="30" rows="10" class="form-control" required><?php echo isset($_GET['edit']) ? $row['description'] : '' ?></textarea>
+                            <label for="" class="form-label">Description</label>
+                            <textarea name="description" id="" cols="30" rows="5"
+                                class="form-control"><?php echo isset($_GET['edit']) ? $row['description'] : '' ?></textarea>
                         </div>
                         <div class="mb-3">
                             <button name="save" type="submit" class="btn btn-success">Save</button>

@@ -22,7 +22,7 @@ $rowOrder = mysqli_fetch_all($queryOrder, MYSQLI_ASSOC);
     <div class="col-sm-12">
       <div class="card">
         <div class="card-body">
-          <h3 class="card-title" align="center">Dashboard</h3>
+          <h1 class="card-title" align="center">Dashboard</h1>
           <div class="row mb-3">
             <div class="col-sm-4"></div>
             <div class="col-sm-4 text-center">
@@ -31,7 +31,7 @@ $rowOrder = mysqli_fetch_all($queryOrder, MYSQLI_ASSOC);
                   <div class="card-body">
                     <h5 class="card-title" align="center">Account Login</h5>
                     <div class="mb-3">
-                      <img src="img/luffy.jpeg" alt="alt" width="50%" />
+                      <img src="img/anon-blue.png" alt="alt" width="50%" />
                     </div>
                     <div style="text-align: justify">
                       Name : <?php echo $rowLogin['name']; ?><br>
@@ -44,32 +44,6 @@ $rowOrder = mysqli_fetch_all($queryOrder, MYSQLI_ASSOC);
               </div>
             </div>
             <div class="col-sm-4"></div>
-            <!-- <div class="col-sm-8">
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Name</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php foreach ($rowOrder as $key => $data) { ?>
-                      <tr>
-                        <td><?php echo $key + 1; ?></td>
-                        <td><?php echo $data['customer_name']; ?></td>
-                        <td><?php echo $data['order_date']; ?></td>
-                        <td><?php echo $data['order_status'] == 1 ? 'Pickup' : 'Process'; ?></td>
-                        <td><?php echo $data['total']; ?></td>
-                      </tr>
-                    <?php } ?>
-                  </tbody>
-                </table>
-              </div>
-            </div> -->
           </div>
           <div class="row mb-3">
             <div class="col-sm-4">

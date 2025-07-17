@@ -1,5 +1,5 @@
 <?php
-include 'config/koneksi.php';
+include 'config/connect.php';
 session_start();
 $id_order = $_GET['id'];
 $id_level = isset($_SESSION['ID_LEVEL']) ? $_SESSION['ID_LEVEL'] : '';
@@ -23,10 +23,10 @@ $jam = explode(" ", $tanggal)[1];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA|Laundry Abdullah</title>
+    <title>Laundry Suci</title>
     <style>
         body {
-            font-family: 'Courier New';
+            font-family: 'Arial Narrow', 'Arial';
             width: 80mm;
             margin: auto;
             padding: 10px;
@@ -134,7 +134,7 @@ $jam = explode(" ", $tanggal)[1];
         </div>
         <div class="line"></div>
         <div class="footer" class="text-center">
-            Terima Kasih!!
+            Thank You For Choosing Us!
         </div>
         <script>
             window.print();

@@ -32,27 +32,29 @@ if (isset($_GET['delete'])) {
                             <a href="?page=manage-order" class="btn btn-primary">New Order</a>
                         </div>
                         <table class="table table-bordered">
-                            <thead>
+                            <thead align="center">
                                 <tr>
                                     <th>No. Order</th>
                                     <th>Name</th>
-                                    <th>Order</th>
+                                    <th>Start Order</th>
                                     <th>Status</th>
-                                    <th></th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($rowOrder as $order): ?>
                                     <tr>
-                                        <td><a
+                                        <td align="center"><a
                                                 href="?page=manage-order&detail=<?php echo $order['id'] ?>"><?php echo $order['order_code'] ?></a>
                                         </td>
                                         <td><?php echo $order['customer_name'] ?></td>
-                                        <td><?php echo $order['order_date'] ?></td>
-                                        <td><?php echo $order['order_status'] == 0 ? 'Process' : 'Pickup' ?></td>
-                                        <td>
-                                            <a href="print.php?id=<?php echo $order['id'] ?>" class="btn btn-warning">Print</a>
-                                            <a href="?page=order&delete=<?php echo $order['id'] ?>" class="btn btn-danger">Delete</a>
+                                        <td align="center"><?php echo $order['order_date'] ?></td>
+                                        <td align="center">
+                                            <?php echo $order['order_status'] == 0 ? '<strong class="text-warning">Process</stong>' : '<strong class="text-success">Picked Up</stong>' ?>
+                                        </td>
+                                        <td align="center">
+                                            <a href="print.php?id=<?php echo $order['id'] ?>" class="btn btn-success">Print</a>
+                                            <!-- <a href="?page=orders&delete=<?php echo $order['id'] ?>" class="btn btn-danger">Delete</a> -->
                                         </td>
                                     </tr>
                                 <?php endforeach ?>

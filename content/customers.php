@@ -7,7 +7,7 @@ if (strtolower($rowLevel['level_name']) == 'leader') {
 
 //SOFT DELETE QUERY
 $queryCustomer = mysqli_query($config, "SELECT * FROM customer
-                                WHERE deleted_at IS NULL ORDER BY id DESC");
+                                WHERE deleted_at IS NULL ORDER BY id ASC");
 $rowCustomer = mysqli_fetch_all($queryCustomer, MYSQLI_ASSOC);
 
 if (isset($_GET['delete'])) {
@@ -26,7 +26,7 @@ if (isset($_GET['delete'])) {
                     <h5 class="card-title">Data Customers</h5>
                     <div class="table-responsive">
                         <div class="mb-3" align="right">
-                            <a href="?page=manage-customer" class="btn btn-primary">Add Customer</a>
+                            <a href="?page=manage-customer" class="btn btn-primary">New Customer</a>
                         </div>
                         <table class="table table-bordered">
                             <thead>
